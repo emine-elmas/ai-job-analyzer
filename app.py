@@ -18,8 +18,19 @@ model = model_yukle()
 
 st.markdown("""
 <style>
-.stApp { background: #f8fafc; color: #0f172a; }
-h1 { font-size: 2.5rem !important; font-weight: 800; }
+
+.stApp { 
+    background: #f8fafc; 
+    color: #0f172a; 
+}
+
+/* TITLE */
+h1 { 
+    font-size: 2.4rem !important; 
+    font-weight: 800;
+}
+
+/* BUTTON */
 .stButton > button {
     background: linear-gradient(90deg, #2563eb, #6366f1);
     color: white;
@@ -27,11 +38,39 @@ h1 { font-size: 2.5rem !important; font-weight: 800; }
     padding: 0.6rem 1.2rem;
     font-weight: 600;
 }
+
+/* METRIC CARDS */
+.metric-card {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+
+    div[data-testid="column"] {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    .metric-card {
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-size: 1.7rem !important;
+    }
+}
+
 </style>
 """, unsafe_allow_html=True)
 
 st.title("💼 AI İş Analiz Sistemi")
-st.caption("Semantic CV Matching + Skill Gap Detection + Akıllı Gelişim Planı")
+st.caption("Semantic CV Matching + Skill Gap Detection")
 
 ilan = st.text_area("📝 İş ilanı")
 cv = st.file_uploader("📄 CV (PDF)", type=["pdf"])
@@ -45,8 +84,20 @@ YETENEK_MAP = {
     "Cloud": ["aws", "docker"],
 }
 
-ROADMAP_MAP = {
+YETENEK_MAP.update({
+    "Frontend": ["html", "css", "javascript", "react"],
+    "Backend": ["node", "django", "flask", "api", "express", "rest"],
+    "Python": ["python", "pandas", "numpy", "oop"],
+    "SQL": ["sql", "mysql", "postgresql", "database"],
+    "AI": ["machine learning", "deep learning", "tensorflow", "scikit-learn", "keras"],
+    "Cloud": ["aws", "docker", "kubernetes"],
+    "Data": ["data analysis", "data science", "data visualization"],
+    "DevOps": ["ci/cd", "github actions", "linux", "docker"],
+    "Mobile": ["flutter", "dart", "android", "ios"],
+    "Tools": ["git", "github", "postman"]
+})
 
+ROADMAP_MAP = {
     "html": [
         "Semantic HTML yapısını öğren (header, section, article)",
         "Form yapıları ve input validation çalış",
@@ -67,7 +118,6 @@ ROADMAP_MAP = {
         "useEffect & useState hook'larını kavra",
         "API bağlantılı küçük bir dashboard geliştir"
     ],
-
     "node": [
         "Node.js event loop ve async mantığını öğren",
         "Express.js ile REST API geliştir",
@@ -88,7 +138,6 @@ ROADMAP_MAP = {
         "HTTP status code'ları detaylı öğren",
         "Swagger/OpenAPI ile dokümantasyon hazırla"
     ],
-
     "python": [
         "OOP (class, inheritance) konularını öğren",
         "Virtual environment kullanmayı öğren",
@@ -104,7 +153,6 @@ ROADMAP_MAP = {
         "Matrix işlemleri pratiği yap",
         "Numpy + Pandas ile veri temizleme projesi geliştir"
     ],
-
     "sql": [
         "SELECT, JOIN, GROUP BY konularını öğren",
         "Subquery ve index mantığını kavra",
@@ -120,7 +168,6 @@ ROADMAP_MAP = {
         "Index ve performans optimizasyonu çalış",
         "Backend uygulamasıyla entegre et"
     ],
-
     "machine learning": [
         "Linear Regression & Classification algoritmalarını öğren",
         "Scikit-learn ile model geliştir",
@@ -137,7 +184,6 @@ ROADMAP_MAP = {
         "Basit bir classification modeli geliştir",
         "Model kaydetme & yükleme işlemlerini öğren"
     ],
-
     "aws": [
         "EC2 ve S3 servislerini öğren",
         "Basit bir uygulamayı AWS EC2'ye deploy et",
@@ -197,47 +243,13 @@ def hybrid(sem, key):
 def eksik(job_sk, cv_sk):
     return list(job_sk - cv_sk)
 
-
-def skill_graph(job_sk, cv_sk):
-    match = len(job_sk & cv_sk)
-    missing = len(job_sk - cv_sk)
-
-    fig, ax = plt.subplots(figsize=(4, 3))
-    ax.bar(["Eşleşen", "Eksik"], [match, missing])
-    ax.set_title("Skill Uyumu Analizi" , fontsize=10)
-    ax.set_ylabel("Skill Sayısı" , fontsize=8)
-
-    st.pyplot(fig, use_container_width=False)
-
-
-def roadmap(missing_skills):
-    if not missing_skills:
-        st.success("🎉 Tüm kritik yetenekler mevcut!")
-        return
-
-    st.subheader("🧭 Sana Özel Teknik Gelişim Planı")
-
-    for skill in missing_skills:
-        st.markdown(f"### 🔥 {skill.upper()}")
-
-        if skill in ROADMAP_MAP:
-            for step in ROADMAP_MAP[skill]:
-                st.write(f"• {step}")
-        else:
-            st.write("• Temel kavramları öğren")
-            st.write("• Mini proje geliştir")
-            st.write("• Gerçek dünya problemi çöz")
-
-        st.markdown("---")
-
 def karar(score):
     if score >= 80:
         return "🔥 Mükemmel Uyum"
     elif score >= 50:
-        return "⚠ Orta Seviye Uyum"
+        return "⚠ Orta Uyum"
     else:
         return "❌ Düşük Uyum"
-
 
 if st.button("🚀 ANALİZ ET"):
 
@@ -258,28 +270,69 @@ if st.button("🚀 ANALİZ ET"):
 
         miss = eksik(job_sk, cv_sk)
 
+        st.markdown("---")
         st.header("📊 Sonuçlar")
 
         col1, col2, col3 = st.columns(3)
-        col1.metric("Hibrit Skor", f"%{final}")
-        col2.metric("Semantic Skor", f"%{sem}")
-        col3.metric("Keyword Skor", f"%{kw}")
+
+        with col1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>Hibrit Skor</h3>
+                <h2>%{final}</h2>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>Semantic</h3>
+                <h2>%{sem}</h2>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <h3>Keyword</h3>
+                <h2>%{kw}</h2>
+            </div>
+            """, unsafe_allow_html=True)
 
         st.progress(final / 100)
 
         st.success(f"Karar: {karar(final)}")
 
         if kw < 40:
-            st.warning("⚠ Teknik skill uyumu düşük.")
+            st.warning("⚠ Skill uyumu düşük")
         if sem < 50:
-            st.warning("⚠ CV içeriği ilanla semantik olarak zayıf eşleşiyor.")
+            st.warning("⚠ Anlamsal uyum düşük")
 
         if miss:
             st.warning(f"Eksik yetenekler: {', '.join(miss)}")
         else:
-            st.success("Eksik yetenek bulunamadı 🎉")
+            st.success("Eksik yok 🎉")
 
         st.subheader("📊 Skill Analizi")
-        skill_graph(job_sk, cv_sk)
 
-        roadmap(miss)
+        fig, ax = plt.subplots(figsize=(4, 3))
+        ax.bar(["Match", "Missing"], [len(job_sk & cv_sk), len(miss)])
+
+        ax.set_title("Skill Uyumu", fontsize=10)
+        ax.tick_params(axis='both', labelsize=8)
+
+        st.pyplot(fig, use_container_width=False)
+
+        if miss:
+            st.subheader("🧭 Gelişim Planı")
+            
+        for m in miss[:3]:
+            st.subheader(f"👉 {m}")
+            key = m.lower().strip()
+        if key in ROADMAP_MAP:
+            for step in ROADMAP_MAP[key]:
+                st.write(f"• {step}")
+        else:
+            st.write("• Temel konuları öğren")
+            st.write("• Mini proje yap")
+            st.write("• Pratik yaparak geliştir")
