@@ -55,6 +55,19 @@ h1 {
     color: #0f172a !important;
 }
 
+div[data-testid="stAlert"] {
+    color: #111111 !important;
+    font-weight: 500;
+}
+
+div[data-testid="stAlert"] p {
+    color: #111111 !important;
+}
+
+.stAlert {
+    color: #111111 !important;
+}
+
 /* MOBILE FIX */
 @media (max-width: 768px) {
 
@@ -72,6 +85,33 @@ h1 {
     }
 }
 
+            /* 🧾 INPUT BOX FIX (TEXT AREA + FILE UPLOADER) */
+textarea,
+input,
+div[data-baseweb="textarea"],
+div[data-baseweb="input"] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+}
+
+/* placeholder görünür olsun */
+textarea::placeholder {
+    color: #64748b !important;
+}
+
+/* file uploader text fix */
+div[data-testid="stFileUploader"] * {
+    color: #0f172a !important;
+}
+
+/* mobile text input fix */
+@media (max-width: 768px) {
+    textarea, input {
+        font-size: 16px !important;
+        color: #0f172a !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -253,7 +293,7 @@ def karar(score):
     if score >= 80:
         return "🔥 Mükemmel Uyum"
     elif score >= 50:
-        return "⚠ Orta Uyum"
+        return "⚠ Orta Seviye Uyum"
     else:
         return "❌ Düşük Uyum"
 
@@ -284,7 +324,7 @@ if st.button("🚀 ANALİZ ET"):
         with col1:
             st.markdown(f"""
             <div class="metric-card">
-                <h3>Hibrit Skor</h3>
+                <h3>Genel Uyum Skoru</h3>
                 <h2>%{final}</h2>
             </div>
             """, unsafe_allow_html=True)
@@ -292,7 +332,7 @@ if st.button("🚀 ANALİZ ET"):
         with col2:
             st.markdown(f"""
             <div class="metric-card">
-                <h3>Semantic</h3>
+                <h3>İçerik Benzerliği</h3>
                 <h2>%{sem}</h2>
             </div>
             """, unsafe_allow_html=True)
@@ -300,7 +340,7 @@ if st.button("🚀 ANALİZ ET"):
         with col3:
             st.markdown(f"""
             <div class="metric-card">
-                <h3>Keyword</h3>
+                <h3>Teknik Beceri Eşleşmesi</h3>
                 <h2>%{kw}</h2>
             </div>
             """, unsafe_allow_html=True)
@@ -310,12 +350,12 @@ if st.button("🚀 ANALİZ ET"):
         st.success(f"Karar: {karar(final)}")
 
         if kw < 40:
-            st.warning("⚠ Skill uyumu düşük")
+            st.info("⚠ Skill uyumu düşük")
         if sem < 50:
-            st.warning("⚠ Anlamsal uyum düşük")
+            st.info("⚠ İlan ile CV arasında içerik uyumu düşük seviyede")
 
         if miss:
-            st.warning(f"Eksik yetenekler: {', '.join(miss)}")
+            st.info(f"Geliştirilmesi gereken alan: {', '.join(miss)}")
         else:
             st.success("Eksik yok 🎉")
 
