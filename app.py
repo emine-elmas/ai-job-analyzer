@@ -47,6 +47,12 @@ h1 {
     text-align: center;
     border: 1px solid #e2e8f0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    color: #0f172a !important;
+}
+
+/* TEXT FIX INSIDE CARD */
+.metric-card * {
+    color: #0f172a !important;
 }
 
 /* MOBILE FIX */
@@ -316,7 +322,7 @@ if st.button("🚀 ANALİZ ET"):
         st.subheader("📊 Skill Analizi")
 
         fig, ax = plt.subplots(figsize=(4, 3))
-        ax.bar(["Match", "Missing"], [len(job_sk & cv_sk), len(miss)])
+        ax.bar(["Uyumlu Yetenekler", "Eksik Yetenekler"], [len(job_sk & cv_sk), len(miss)])
 
         ax.set_title("Skill Uyumu", fontsize=10)
         ax.tick_params(axis='both', labelsize=8)
