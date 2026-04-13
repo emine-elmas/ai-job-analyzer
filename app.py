@@ -24,22 +24,21 @@ st.markdown("""
     color: #0f172a; 
 }
 
-/* TITLE */
 h1 { 
     font-size: 2.4rem !important; 
     font-weight: 800;
 }
 
-/* BUTTON */
+
 .stButton > button {
     background: linear-gradient(90deg, #2563eb, #6366f1);
-    color: white;
+    color: white !important;
     border-radius: 12px;
     padding: 0.6rem 1.2rem;
     font-weight: 600;
+    border: none;
 }
 
-/* METRIC CARDS */
 .metric-card {
     background: white;
     padding: 20px;
@@ -50,25 +49,46 @@ h1 {
     color: #0f172a !important;
 }
 
-/* TEXT FIX INSIDE CARD */
 .metric-card * {
     color: #0f172a !important;
 }
 
-div[data-testid="stAlert"] {
+div[data-testid="stAlert"],
+div[data-testid="stAlert"] p {
     color: #111111 !important;
     font-weight: 500;
 }
-
-div[data-testid="stAlert"] p {
-    color: #111111 !important;
+textarea {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+    border-radius: 10px;
+}
+input {
+    color: #0f172a !important;
+}
+div[data-baseweb="base-input"],
+div[data-baseweb="textarea"] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+div[data-baseweb="textarea"] textarea {
+    color: #0f172a !important;
+    background-color: #ffffff !important;
+}
+div[data-testid="stFileUploader"] {
+    background-color: #ffffff !important;
+    border-radius: 10px;
+    padding: 10px;
 }
 
-.stAlert {
-    color: #111111 !important;
+div[data-testid="stFileUploader"] * {
+    color: #0f172a !important;
+}
+textarea::placeholder {
+    color: #94a3b8 !important;
 }
 
-/* MOBILE FIX */
 @media (max-width: 768px) {
 
     div[data-testid="column"] {
@@ -83,33 +103,11 @@ div[data-testid="stAlert"] p {
     h1 {
         font-size: 1.7rem !important;
     }
-}
 
-            /* 🧾 INPUT BOX FIX (TEXT AREA + FILE UPLOADER) */
-textarea,
-input,
-div[data-baseweb="textarea"],
-div[data-baseweb="input"] {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-    -webkit-text-fill-color: #0f172a !important;
-}
-
-/* placeholder görünür olsun */
-textarea::placeholder {
-    color: #64748b !important;
-}
-
-/* file uploader text fix */
-div[data-testid="stFileUploader"] * {
-    color: #0f172a !important;
-}
-
-/* mobile text input fix */
-@media (max-width: 768px) {
     textarea, input {
         font-size: 16px !important;
         color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
     }
 }
 </style>
