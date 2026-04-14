@@ -128,8 +128,73 @@ label {
 
 /* MOBİL */
 @media (max-width: 768px) {
+
+    /* container full width */
+    .block-container {
+        max-width: 100% !important;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* başlıklar */
     .main-title {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+    }
+
+    .sub-title {
+        font-size: 0.9rem;
+    }
+
+    /* textarea (ilan) */
+    div[data-baseweb="textarea"] {
+        background: rgba(255,255,255,0.08) !important;
+        border-radius: 14px !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+    }
+
+    textarea {
+        font-size: 14px !important;
+    }
+
+    /* file uploader */
+    div[data-testid="stFileUploader"] {
+        padding: 15px;
+        border-radius: 16px;
+    }
+
+    /* 🔥 KARTLAR ALT ALTA GEÇSİN */
+    div[data-testid="column"] {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+
+    /* kart boyutu mobil */
+    .metric-card {
+        width: 100% !important;
+        height: auto !important;
+        padding: 18px;
+    }
+
+    /* progress bar */
+    div[data-testid="stProgress"] > div {
+        height: 8px;
+    }
+
+    /* karar kutusu */
+    div[style*="#16a34a"] {
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+
+    /* geliştirme alanı */
+    div[style*="#2563eb"] {
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+
+    /* grafik küçült */
+    canvas {
+        max-width: 100% !important;
     }
 }
 
