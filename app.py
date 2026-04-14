@@ -18,21 +18,17 @@ model = model_yukle()
 
 st.markdown("""
 <style>
-
-/* BACKGROUND */
 .stApp {
     background: linear-gradient(135deg, #1f2937, #374151, #111827);
     color: white;
 }
 
-/* CONTAINER */
 .block-container {
     max-width: 1100px;
     margin: auto;
     padding-top: 2rem;
 }
 
-/* TITLE */
 .main-title {
     text-align: center;
     font-size: 2.2rem;
@@ -74,7 +70,6 @@ textarea::placeholder {
     color: rgba(255,255,255,0.6) !important;
 }
 
-/* FILE UPLOADER */
 div[data-testid="stFileUploader"] {
     background: rgba(255,255,255,0.08) !important;
     border: 1px solid rgba(255,255,255,0.2) !important;
@@ -91,7 +86,6 @@ div[data-testid="stFileUploader"] * {
     color: #67e8f9 !important;
 }
 
-/* BUTTON */
 .stButton > button {
     background: linear-gradient(90deg, #06b6d4, #8b5cf6);
     color: white !important;
@@ -121,22 +115,19 @@ div[data-testid="stFileUploader"] * {
     transition: 0.2s;
 }
 
-/* LABEL */
+
 label {
     color: #cbd5f5 !important;
 }
 
-/* MOBİL */
 @media (max-width: 768px) {
 
-    /* container full width */
     .block-container {
         max-width: 100% !important;
         padding-left: 10px;
         padding-right: 10px;
     }
 
-    /* başlıklar */
     .main-title {
         font-size: 1.5rem;
     }
@@ -145,7 +136,6 @@ label {
         font-size: 0.9rem;
     }
 
-    /* textarea (ilan) */
     div[data-baseweb="textarea"] {
         background: rgba(255,255,255,0.08) !important;
         border-radius: 14px !important;
@@ -156,43 +146,36 @@ label {
         font-size: 14px !important;
     }
 
-    /* file uploader */
     div[data-testid="stFileUploader"] {
         padding: 15px;
         border-radius: 16px;
     }
 
-    /* 🔥 KARTLAR ALT ALTA GEÇSİN */
     div[data-testid="column"] {
         flex-direction: column !important;
         gap: 10px;
     }
 
-    /* kart boyutu mobil */
     .metric-card {
         width: 100% !important;
         height: auto !important;
         padding: 18px;
     }
 
-    /* progress bar */
     div[data-testid="stProgress"] > div {
         height: 8px;
     }
-
-    /* karar kutusu */
+            
     div[style*="#16a34a"] {
         font-size: 14px !important;
         padding: 12px !important;
     }
 
-    /* geliştirme alanı */
     div[style*="#2563eb"] {
         font-size: 14px !important;
         padding: 12px !important;
     }
 
-    /* grafik küçült */
     canvas {
         max-width: 100% !important;
     }
@@ -329,7 +312,6 @@ ROADMAP_MAP = {
         "Docker Compose ile multi-container yapı kur"
     ]
 }
-
 def temizle(text):
     text = text.lower()
     text = re.sub(r"[^a-z0-9çğıöşü\s]", " ", text)
@@ -362,14 +344,18 @@ def keyword_score(job_sk, cv_sk):
     return round((len(job_sk & cv_sk) / len(job_sk)) * 100)
 
 def semantic_score(job, cv):
-    if not job or not cv:
-        return 0
 
-    emb1 = model.encode(job, convert_to_tensor=True)
-    emb2 = model.encode(cv, convert_to_tensor=True)
+        job = job[:4000]
+        cv = cv[:4000]
 
-    score = float(util.cos_sim(emb1, emb2))
-    return round(score * 100)
+        if not job or not cv:
+           return 0
+
+        emb1 = model.encode(job, convert_to_tensor=True, normalize_embeddings=True)
+        emb2 = model.encode(cv, convert_to_tensor=True, normalize_embeddings=True)
+
+        score = util.cos_sim(emb1, emb2).item()
+        return round(score * 100)
 
 def hybrid(sem, key):
     return round(sem * 0.7 + key * 0.3)
@@ -397,7 +383,6 @@ if analiz:
         st.warning("Lütfen CV yükleyin.")
         st.stop()
 
-    # 🔥 SESSION'DAN CV AL
     cv = st.session_state["cv_file"]
 
     with st.spinner("Analiz ediliyor..."):
