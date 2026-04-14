@@ -448,7 +448,7 @@ if analiz:
 
         if kw < 40:
             st.info("⚠ Skill uyumu düşük")
-        if sem < 50:
+        if sem < 45:
             st.info("⚠ İlan ile CV arasında içerik uyumu düşük seviyede")
 
         if miss:
