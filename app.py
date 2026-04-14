@@ -206,6 +206,8 @@ st.markdown('<div class="sub-title">CV’n İşe Ne Kadar Uygun? Eksiklerini Ke�
 
 ilan = st.text_area("📝 İş ilanı")
 cv = st.file_uploader("📄 CV (PDF)", type=["pdf"])
+if cv:
+    st.session_state["cv_file"] = cv
 
 YETENEK_MAP = {
     "Frontend": ["html", "css", "javascript", "react"],
@@ -383,15 +385,28 @@ def karar(score):
     else:
         return "❌ Düşük Uyum"
 
-if st.button("🚀 ANALİZ ET"):
+analiz = st.button("🚀 ANALİZ ET")
+
+if analiz:
 
     if not ilan:
         st.warning("İlan giriniz.")
         st.stop()
 
+    if "cv_file" not in st.session_state:
+        st.warning("Lütfen CV yükleyin.")
+        st.stop()
+
+    # 🔥 SESSION'DAN CV AL
+    cv = st.session_state["cv_file"]
+
     with st.spinner("Analiz ediliyor..."):
 
         cv_text = pdf_oku(cv)
+
+        if not cv_text:
+            st.error("❌ CV okunamadı!")
+            st.stop()
 
         job_sk = skill_cikar(ilan)
         cv_sk = skill_cikar(cv_text)
@@ -408,8 +423,7 @@ if st.button("🚀 ANALİZ ET"):
         col1, col2, col3 = st.columns(3, gap="small")
 
         with col1:
-            c = st.container()
-            c.markdown(f"""
+            st.markdown(f"""
             <div class="metric-card">
                 <h3>Genel Uyum Skoru</h3>
                 <h2>%{final}</h2>
@@ -417,8 +431,7 @@ if st.button("🚀 ANALİZ ET"):
             """, unsafe_allow_html=True)
 
         with col2:
-            c = st.container()
-            c.markdown(f"""
+            st.markdown(f"""
             <div class="metric-card">
                 <h3>İçerik Benzerliği</h3>
                 <h2>%{sem}</h2>
@@ -426,8 +439,7 @@ if st.button("🚀 ANALİZ ET"):
             """, unsafe_allow_html=True)
 
         with col3:
-            c = st.container()
-            c.markdown(f"""
+            st.markdown(f"""
             <div class="metric-card">
                 <h3>Teknik Beceri Eşleşmesi</h3>
                 <h2>%{kw}</h2>
@@ -484,14 +496,15 @@ if st.button("🚀 ANALİZ ET"):
 
         if miss:
             st.subheader("🧭 Gelişim Planı")
-            
+
         for m in miss[:3]:
             st.subheader(f"👉 {m}")
             key = m.lower().strip()
-        if key in ROADMAP_MAP:
-            for step in ROADMAP_MAP[key]:
-                st.write(f"• {step}")
-        else:
-            st.write("• Temel konuları öğren")
-            st.write("• Mini proje yap")
-            st.write("• Pratik yaparak geliştir")
+
+            if key in ROADMAP_MAP:
+                for step in ROADMAP_MAP[key]:
+                    st.write(f"• {step}")
+            else:
+                st.write("• Temel konuları öğren")
+                st.write("• Mini proje yap")
+                st.write("• Pratik yaparak geliştir")
