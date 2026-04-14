@@ -19,102 +19,125 @@ model = model_yukle()
 st.markdown("""
 <style>
 
-.stApp { 
-    background: #f8fafc; 
-    color: #0f172a; 
+/* BACKGROUND */
+.stApp {
+    background: linear-gradient(135deg, #1f2937, #374151, #111827);
+    color: white;
 }
 
-h1 { 
-    font-size: 2.4rem !important; 
+/* CONTAINER */
+.block-container {
+    max-width: 1100px;
+    margin: auto;
+    padding-top: 2rem;
+}
+
+/* TITLE */
+.main-title {
+    text-align: center;
+    font-size: 2.2rem;
     font-weight: 800;
 }
 
-
-.stButton > button {
-    background: linear-gradient(90deg, #2563eb, #6366f1);
-    color: white !important;
-    border-radius: 12px;
-    padding: 0.6rem 1.2rem;
-    font-weight: 600;
-    border: none;
-}
-
-.metric-card {
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
+.sub-title {
     text-align: center;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    color: #0f172a !important;
+    color: #67e8f9;
+    margin-bottom: 2rem;
 }
 
-.metric-card * {
-    color: #0f172a !important;
+/* TEXTAREA FIX */
+textarea,
+textarea:focus,
+textarea:active {
+    background: transparent !important;
+    color: white !important;
+    -webkit-text-fill-color: white !important;
 }
 
-div[data-testid="stAlert"],
-div[data-testid="stAlert"] p {
-    color: #111111 !important;
-    font-weight: 500;
-}
-textarea {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-    -webkit-text-fill-color: #0f172a !important;
-    border-radius: 10px;
-}
-input {
-    color: #0f172a !important;
-}
-div[data-baseweb="base-input"],
 div[data-baseweb="textarea"] {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
+    background: rgba(255,255,255,0.08) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    backdrop-filter: blur(10px);
 }
+
+div[data-baseweb="textarea"] > div {
+    background: transparent !important;
+}
+
 div[data-baseweb="textarea"] textarea {
-    color: #0f172a !important;
-    background-color: #ffffff !important;
+    background: transparent !important;
+    color: white !important;
 }
+
+textarea::placeholder {
+    color: rgba(255,255,255,0.6) !important;
+}
+
+/* FILE UPLOADER */
 div[data-testid="stFileUploader"] {
-    background-color: #ffffff !important;
-    border-radius: 10px;
-    padding: 10px;
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 20px;
+    padding: 25px;
+    backdrop-filter: blur(12px);
+}
+
+div[data-testid="stFileUploader"] section {
+    background: transparent !important;
 }
 
 div[data-testid="stFileUploader"] * {
-    color: #0f172a !important;
-}
-textarea::placeholder {
-    color: #94a3b8 !important;
+    color: #67e8f9 !important;
 }
 
+/* BUTTON */
+.stButton > button {
+    background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+    color: white !important;
+    border-radius: 20px;
+    padding: 0.9rem;
+    font-weight: 600;
+    border: none;
+    width: 100%;
+}
+.metric-card {
+    background: rgba(255,255,255,0.08);
+    padding: 22px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    color: white !important;
+
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    transition: 0.2s;
+}
+
+/* LABEL */
+label {
+    color: #cbd5f5 !important;
+}
+
+/* MOBİL */
 @media (max-width: 768px) {
-
-    div[data-testid="column"] {
-        flex: 1 1 100% !important;
-        max-width: 100% !important;
-    }
-
-    .metric-card {
-        margin-bottom: 10px;
-    }
-
-    h1 {
-        font-size: 1.7rem !important;
-    }
-
-    textarea, input {
-        font-size: 16px !important;
-        color: #0f172a !important;
-        -webkit-text-fill-color: #0f172a !important;
+    .main-title {
+        font-size: 1.6rem;
     }
 }
+
 </style>
 """, unsafe_allow_html=True)
 
-st.title("💼 AI İş Analiz Sistemi")
-st.caption("Semantic CV Matching + Skill Gap Detection")
+st.markdown('<div class="main-title">💼 AI İş Analiz Sistemi</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">CV’n İşe Ne Kadar Uygun? Eksiklerini Keşfet</div>', unsafe_allow_html=True)
 
 ilan = st.text_area("📝 İş ilanı")
 cv = st.file_uploader("📄 CV (PDF)", type=["pdf"])
@@ -317,10 +340,11 @@ if st.button("🚀 ANALİZ ET"):
         st.markdown("---")
         st.header("📊 Sonuçlar")
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3, gap="small")
 
         with col1:
-            st.markdown(f"""
+            c = st.container()
+            c.markdown(f"""
             <div class="metric-card">
                 <h3>Genel Uyum Skoru</h3>
                 <h2>%{final}</h2>
@@ -328,7 +352,8 @@ if st.button("🚀 ANALİZ ET"):
             """, unsafe_allow_html=True)
 
         with col2:
-            st.markdown(f"""
+            c = st.container()
+            c.markdown(f"""
             <div class="metric-card">
                 <h3>İçerik Benzerliği</h3>
                 <h2>%{sem}</h2>
@@ -336,7 +361,8 @@ if st.button("🚀 ANALİZ ET"):
             """, unsafe_allow_html=True)
 
         with col3:
-            st.markdown(f"""
+            c = st.container()
+            c.markdown(f"""
             <div class="metric-card">
                 <h3>Teknik Beceri Eşleşmesi</h3>
                 <h2>%{kw}</h2>
@@ -345,7 +371,18 @@ if st.button("🚀 ANALİZ ET"):
 
         st.progress(final / 100)
 
-        st.success(f"Karar: {karar(final)}")
+        st.markdown(f"""
+        <div style="
+        background: linear-gradient(90deg, #16a34a, #22c55e);
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: white;
+        text-align:center;
+        ">
+        Karar: {karar(final)}
+        </div>
+        """, unsafe_allow_html=True)
 
         if kw < 40:
             st.info("⚠ Skill uyumu düşük")
@@ -353,7 +390,20 @@ if st.button("🚀 ANALİZ ET"):
             st.info("⚠ İlan ile CV arasında içerik uyumu düşük seviyede")
 
         if miss:
-            st.info(f"Geliştirilmesi gereken alan: {', '.join(miss)}")
+            st.markdown(f"""
+            <div style="
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            ">
+            Geliştirilmesi gereken alan: {', '.join(miss)}
+            </div>
+            """, unsafe_allow_html=True)
         else:
             st.success("Eksik yok 🎉")
 
